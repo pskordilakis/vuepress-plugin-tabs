@@ -1,8 +1,10 @@
-# Vuepress Tabs
+# Vuepress Plugin Tabs
 
 Tabs Container for Vuepress
 
 Expose [vue-tabs-component](https://github.com/spatie/vue-tabs-component) as custom markdown container
+
+Used with version >= 1.x.x of Vuepress. For version 0.x use [vuepress-tabs](https://github.com/pskordilakis/vuepress-tabs)
 
 ## Installation
 
