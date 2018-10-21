@@ -29,7 +29,7 @@ module.exports = {
 import theme in .vuepress/styles/index.styl
 
 ``` stylus
-@require '~vuepress-pugin-tabs/dist/themes/default.styl'
+@require '~vuepress-plugin-tabs/dist/themes/default.styl'
 ```
 
 ## Usage
