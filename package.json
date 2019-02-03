@@ -7,6 +7,10 @@
     "vuepress",
     "tabs"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pskordilakis/vuepress-plugin-tabs.git"
+  },
   "license": "MIT",
   "main": "dist/vuepress-plugin-tabs.cjs.js",
   "module": "dist/vuepress-plugin-tabs.esm.js",
