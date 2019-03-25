@@ -45,7 +45,7 @@ __markdown content__
 ::: tab javascript
 ``` javascript
 () => {
-  console.log('Javscript code example')
+  console.log('Javascript code example')
 }
 ```
 :::
@@ -69,7 +69,7 @@ __markdown content__
 ::: tab javascript id="second-tab"
 ``` javascript
 () => {
-  console.log('Javscript code example')
+  console.log('JavaScript code example')
 }
 ```
 :::
@@ -96,7 +96,7 @@ __markdown content__
 ::: tab javascript id="second-tab"
 ``` javascript
 () => {
-  console.log('Javscript code example')
+  console.log('JavaScript code example')
 }
 ```
 :::
