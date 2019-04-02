@@ -1,4 +1,4 @@
-import { tabAttributes, tabsAttributes } from '../src/util'
+import { tabAttributes, tabsAttributes, dedupeId } from '../src/util'
 
 describe('tabAttributes', () => {
   test('must handle sorthand name attributes', () => {
@@ -36,5 +36,13 @@ describe('tabsAttributes', () => {
 
   test('must handle mixed attributes', () => {
     expect(tabsAttributes('tabs cache-lifetime="10" :options="{ useUrlFragment: false }"')).toBe('cache-lifetime="10" :options="{ useUrlFragment: false }"')
+  })
+})
+
+describe('dedupeId', () => {
+  test('must add a number suffix if called with same parameter', () => {
+    [...Array(5).keys()].map(i => i + 1).forEach(i => {
+      expect(dedupeId('id')).toBe(`id-${i}`)
+    });
   })
 })

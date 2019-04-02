@@ -1,7 +1,58 @@
 'use strict';
 
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+// Map to keep track of used ids
+var tabIds = new Map();
+
+function dedupeId(id) {
+  var normalizedId = String(id).toLowerCase().replace(' ', '-');
+  var currentValue = !tabIds.has(normalizedId) ? 1 : tabIds.get(normalizedId) + 1;
+  tabIds.set(normalizedId, currentValue);
+
+  return normalizedId + '-' + currentValue;
+}
+
 function tabAttributes(val) {
-  return val
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  var attributes = val
   // sanitize input
   .trim().slice("tab".length).trim()
   // parse into array
@@ -10,20 +61,47 @@ function tabAttributes(val) {
   .map(function (attr) {
     if (!attr.includes("=")) {
       if (!attr.startsWith('"')) {
-        attr = "\"" + attr;
+        attr = '"' + attr;
       }
 
       if (!attr.endsWith('"')) {
-        attr = attr + "\"";
+        attr = attr + '"';
       }
 
-      return "name=" + attr;
+      return 'name=' + attr;
     }
 
     return attr;
-  })
-  // roin into a string
-  .join(" ");
+  });
+
+  if (options.dedupeIds) {
+    var idIndex = attributes.findIndex(function (attr) {
+      return attr.startsWith('id=');
+    });
+    var nameIndex = attributes.findIndex(function (attr) {
+      return attr.startsWith('name=');
+    });
+
+    if (idIndex !== -1) {
+      var id = attributes[idIndex];
+
+      var _id$split = id.split('='),
+          _id$split2 = slicedToArray(_id$split, 2),
+          idValue = _id$split2[1];
+
+      attributes[idIndex] = 'id="' + dedupeId(idValue.substring(1, idValue.length - 1)) + '"';
+    } else {
+      var name = attributes[nameIndex];
+
+      var _name$split = name.split('='),
+          _name$split2 = slicedToArray(_name$split, 2),
+          nameValue = _name$split2[1];
+
+      attributes.unshift('id="' + dedupeId(nameValue.substring(1, nameValue.length - 1)) + '"');
+    }
+  }
+
+  return attributes.join(" ");
 }
 
 function tabsAttributes(val) {
@@ -51,11 +129,11 @@ var tabs = (function (md) {
 
 var container$1 = require('markdown-it-container');
 
-var tab = (function (md) {
+var tab = (function (md, options) {
   md.use(container$1, 'tab', {
     render: function render(tokens, idx) {
       var token = tokens[idx];
-      var attributes = tabAttributes(token.info);
+      var attributes = tabAttributes(token.info, options);
 
       if (token.nesting === 1) {
         return '<tab ' + attributes + '>\n';
@@ -66,7 +144,13 @@ var tab = (function (md) {
   });
 });
 
-module.exports = function () {
+module.exports = function (opts) {
+  var defaultOptions = {
+    dedupeIds: false
+  };
+
+  var options = Object.assign({}, defaultOptions, opts);
+
   return {
     enhanceAppFiles: [{
       name: 'register-vue-tabs-component',
@@ -74,7 +158,7 @@ module.exports = function () {
     }],
     extendMarkdown: function extendMarkdown(md) {
       tabs(md);
-      tab(md);
+      tab(md, options);
     }
   };
 };
