@@ -1,7 +1,13 @@
 import tabs from './tabs'
 import tab from './tab'
 
-module.exports = () => {
+module.exports = (opts) => {
+  const defaultOptions = {
+    dedupeIds: false
+  }
+
+  const options = Object.assign({}, defaultOptions, opts)
+
   return {
     enhanceAppFiles: [
       {
@@ -11,7 +17,7 @@ module.exports = () => {
     ],
     extendMarkdown: md => {
       tabs(md)
-      tab(md)
+      tab(md, options)
     }
   }
 }
