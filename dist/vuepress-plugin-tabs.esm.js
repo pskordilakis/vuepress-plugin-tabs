@@ -108,16 +108,31 @@ function tabsAttributes(val) {
   .trim().slice("tabs".length).trim();
 }
 
+function defaultTabsAttributes(attributes) {
+  var attributesString = [];
+  if (!attributes || Object.keys(attributes).length === 0) {
+    return '';
+  }
+
+  for (var key in attributes) {
+    var substring = ':' + key + '=\'' + JSON.stringify(attributes[key]) + '\'';
+    attributesString.push(substring);
+  }
+
+  return attributesString.join(' ');
+}
+
 var container = require('markdown-it-container');
 
-var tabs = (function (md) {
+var tabs = (function (md, options) {
   md.use(container, 'tabs', {
     render: function render(tokens, idx) {
       var token = tokens[idx];
+      var defaultAttributes = defaultTabsAttributes(options.tabsAttributes);
       var attributes = tabsAttributes(token.info);
 
       if (token.nesting === 1) {
-        return '<tabs ' + attributes + '>\n';
+        return '<tabs ' + defaultAttributes + ' ' + attributes + '>\n';
       } else {
         return '</tabs>\n';
       }
@@ -155,7 +170,7 @@ module.exports = function (opts) {
       content: 'import Tabs from \'vue-tabs-component\';export default ({ Vue }) => Vue.use(Tabs)'
     }],
     extendMarkdown: function extendMarkdown(md) {
-      tabs(md);
+      tabs(md, options);
       tab(md, options);
     }
   };

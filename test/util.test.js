@@ -1,4 +1,4 @@
-import { tabAttributes, tabsAttributes, dedupeId } from '../src/util'
+import { tabAttributes, tabsAttributes, dedupeId, defaultTabsAttributes } from '../src/util'
 
 describe('tabAttributes', () => {
   test('must handle sorthand name attributes', () => {
@@ -44,5 +44,18 @@ describe('dedupeId', () => {
     [...Array(5).keys()].map(i => i + 1).forEach(i => {
       expect(dedupeId('id')).toBe(`id-${i}`)
     });
+  })
+})
+
+describe('defaultTabsAttributes', () => {
+  test('must transform object to vue binded attributes', () => {
+    expect(
+      defaultTabsAttributes({ options: { foo: 'bar', bar: 123 }, baz: 123 })
+    ).toBe(':options=\'{"foo":"bar","bar":123}\' :baz=\'123\'')
+  })
+  test('must transform plain object to empty string', () => {
+    expect(
+      defaultTabsAttributes({})
+    ).toBe('')
   })
 })

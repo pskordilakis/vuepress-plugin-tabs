@@ -62,3 +62,17 @@ export function tabsAttributes(val) {
       .trim()
   );
 }
+
+export function defaultTabsAttributes(attributes) {
+  let attributesString = []
+  if (!attributes || Object.keys(attributes).length === 0) {
+    return ''
+  }
+
+  for (const key in attributes) {
+    const substring = `:${key}='${JSON.stringify(attributes[key])}'` 
+    attributesString.push(substring)
+  }
+
+  return attributesString.join(' ')
+}
