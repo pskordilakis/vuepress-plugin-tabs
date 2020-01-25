@@ -16,7 +16,7 @@ module.exports = (opts) => {
       }
     ],
     extendMarkdown: md => {
-      tabs(md)
+      tabs(md, options)
       tab(md, options)
     }
   }
