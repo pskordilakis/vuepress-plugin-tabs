@@ -1,7 +1,7 @@
 {
   "name": "vuepress-plugin-tabs",
   "author": "Panagiotis Skordilakis <p.skordilakis@gmail.com>",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Vuepress plugin tabs - markdown custom container to display content in tabs",
   "keywords": [
     "vuepress",
